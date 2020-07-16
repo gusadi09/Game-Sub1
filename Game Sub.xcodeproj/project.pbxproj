@@ -19,6 +19,8 @@
 		F1A4831C24BF304A0039EC5F /* Poppins-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F1A4831824BF304A0039EC5F /* Poppins-Medium.ttf */; };
 		F1A4831D24BF304A0039EC5F /* Poppins-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F1A4831924BF304A0039EC5F /* Poppins-Regular.ttf */; };
 		F1A4831E24BF304A0039EC5F /* Poppins-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F1A4831A24BF304A0039EC5F /* Poppins-ExtraBold.ttf */; };
+		F1A4832024C0B20F0039EC5F /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A4831F24C0B20F0039EC5F /* AboutViewController.swift */; };
+		F1A4832224C0B2220039EC5F /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A4832124C0B2220039EC5F /* DetailViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +38,8 @@
 		F1A4831824BF304A0039EC5F /* Poppins-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Medium.ttf"; sourceTree = "<group>"; };
 		F1A4831924BF304A0039EC5F /* Poppins-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Regular.ttf"; sourceTree = "<group>"; };
 		F1A4831A24BF304A0039EC5F /* Poppins-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-ExtraBold.ttf"; sourceTree = "<group>"; };
+		F1A4831F24C0B20F0039EC5F /* AboutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
+		F1A4832124C0B2220039EC5F /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +88,8 @@
 			isa = PBXGroup;
 			children = (
 				F1A482FE24BEFD2F0039EC5F /* ViewController.swift */,
+				F1A4831F24C0B20F0039EC5F /* AboutViewController.swift */,
+				F1A4832124C0B2220039EC5F /* DetailViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -200,11 +206,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F1A4832024C0B20F0039EC5F /* AboutViewController.swift in Sources */,
 				F1A482FF24BEFD2F0039EC5F /* ViewController.swift in Sources */,
 				F1A4831324BF2F3A0039EC5F /* GameData.swift in Sources */,
 				F1A482FB24BEFD2F0039EC5F /* AppDelegate.swift in Sources */,
 				F1A482FD24BEFD2F0039EC5F /* SceneDelegate.swift in Sources */,
 				F1A4831524BF2F440039EC5F /* GameManager.swift in Sources */,
+				F1A4832224C0B2220039EC5F /* DetailViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
