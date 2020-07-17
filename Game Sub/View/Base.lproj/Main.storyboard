@@ -31,7 +31,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                             </tableView>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="186" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="UbL-dh-zOF">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="215" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="UbL-dh-zOF">
                                 <rect key="frame" x="20" y="227" width="374" height="586"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                             </tableView>
@@ -143,19 +143,20 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="F7G-6m-BPu" firstAttribute="top" secondItem="N2G-gu-JRv" secondAttribute="bottom" constant="8" id="0CP-6u-ZDl"/>
-                            <constraint firstItem="UbL-dh-zOF" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="2Fa-6B-SP7"/>
-                            <constraint firstItem="UbL-dh-zOF" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="2lA-AL-C5A"/>
                             <constraint firstItem="N2G-gu-JRv" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="3CO-zY-3PF"/>
                             <constraint firstItem="E8Y-yF-lNs" firstAttribute="top" secondItem="F7G-6m-BPu" secondAttribute="bottom" constant="15" id="6h3-Vr-JQk"/>
                             <constraint firstItem="N2G-gu-JRv" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="82U-gS-eNG"/>
                             <constraint firstItem="F7G-6m-BPu" firstAttribute="top" secondItem="N2G-gu-JRv" secondAttribute="bottom" constant="8" id="BQz-7l-iDd"/>
+                            <constraint firstItem="UbL-dh-zOF" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="F0k-zb-b45"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="N2G-gu-JRv" secondAttribute="trailing" constant="20" id="HZ6-mS-b1O"/>
+                            <constraint firstItem="UbL-dh-zOF" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="IGH-NG-JH5"/>
+                            <constraint firstItem="UbL-dh-zOF" firstAttribute="top" secondItem="E8Y-yF-lNs" secondAttribute="bottom" constant="15" id="IzW-uP-pHg"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="F7G-6m-BPu" secondAttribute="trailing" constant="20" id="P8N-FF-c65"/>
                             <constraint firstItem="E8Y-yF-lNs" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" constant="-251" id="PyV-cz-cAm"/>
-                            <constraint firstItem="UbL-dh-zOF" firstAttribute="top" secondItem="E8Y-yF-lNs" secondAttribute="bottom" constant="15" id="Ts6-TO-JHa"/>
                             <constraint firstItem="E8Y-yF-lNs" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="cUK-ey-Hr9"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="UbL-dh-zOF" secondAttribute="trailing" constant="20" id="e9i-Qk-cPt"/>
                             <constraint firstItem="F7G-6m-BPu" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="pUI-rP-Dts"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="UbL-dh-zOF" secondAttribute="trailing" constant="20" id="tiE-9w-XqK"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
@@ -234,13 +235,13 @@
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Agus Adi Pranata" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EsZ-kA-jzz">
-                                <rect key="frame" x="125.5" y="214" width="163" height="29.5"/>
+                                <rect key="frame" x="113" y="214" width="188" height="29.5"/>
                                 <fontDescription key="fontDescription" name="Poppins-Bold" family="Poppins" pointSize="21"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Telkom University" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="73M-99-TME">
-                                <rect key="frame" x="152" y="263" width="110" height="20"/>
+                                <rect key="frame" x="146.5" y="263" width="121.5" height="20"/>
                                 <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="14"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
