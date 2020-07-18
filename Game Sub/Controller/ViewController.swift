@@ -13,7 +13,7 @@ enum DownloadState {
 }
 
 class ImageDownloader: Operation {
-    private var _game: GameModel
+    private let _game: GameModel
  
     init(game: GameModel) {
         _game = game
@@ -24,7 +24,7 @@ class ImageDownloader: Operation {
             return
         }
  
-        guard let imageData = try? Data(contentsOf: URL(string: _game.bgImage)!) else { return }
+        guard let imageData = try? Data(contentsOf: _game.bgImage) else { return }
  
         if isCancelled {
             return
@@ -141,7 +141,7 @@ class ViewController: UIViewController {
                 let game = try! decoder.decode(GameData.self, from: data)
                 
                 game.results.forEach { (result) in
-                    let newData = GameModel(name: result.name, released: result.released, bgImage: result.bgImage!, rating: result.rating)
+                    let newData = GameModel(name: result.name, released: result.released, bgImage: URL(string: result.bgImage!)!, rating: result.rating)
                     
                     self.gameDat.append(newData)
                 }
@@ -169,7 +169,7 @@ class ViewController: UIViewController {
                 let game = try! decoder.decode(GameData.self, from: data)
                 
                 game.results.forEach { (result) in
-                    let newData = GameModel(name: result.name, released: result.released, bgImage: result.bgImage!, rating: result.rating)
+                    let newData = GameModel(name: result.name, released: result.released, bgImage: URL(string: result.bgImage!)!, rating: result.rating)
                     
                     self.popularGame.append(newData)
                 }
@@ -234,7 +234,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
             let cell2 = popularTable.dequeueReusableCell(withIdentifier: "popCell", for: indexPath) as! PopularTableViewCell
             
             if indexPath.row >= 0 && indexPath.count < popularGame.count {
-                //print(popularGame[indexPath.row])
+                print(popularGame[indexPath.row].image)
                 
                 cell2.gameImage.image = popular.image
                 cell2.gameTitle.text = popular.name
@@ -252,7 +252,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         
         if indexPath.row >= 0 && indexPath.count < gameDat.count {
             let game = gameDat[indexPath.row]
-            //print(gameDat[indexPath.row])
+            print(gameDat[indexPath.row].image)
             cell.gameImage.image = game.image
             cell.gameTitle.text = game.name
             cell.gameRating.text = String(game.rating)
@@ -260,8 +260,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         
         if gameDat[indexPath.row].state == .new {
             if !gameTable.isDragging && !gameTable.isDecelerating {
-                //startOperations(game: gameDat[indexPath.row], indexPath: indexPath)
-                startDownload(game: gameDat[indexPath.row], indexPath: indexPath)
+                startOperations(game: gameDat[indexPath.row], indexPath: indexPath)
             }
         }
     
@@ -280,6 +279,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
                     DispatchQueue.main.async {
                         controller.gameTitle.text = self.gameDat[indexPath.row].name
                         controller.gameImage.image = self.gameDat[indexPath.row].image
+                        self.startOperations(game: self.gameDat[indexPath.row], indexPath: indexPath)
                     }
                 }
             } else {
@@ -288,6 +288,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
                     DispatchQueue.main.async {
                         controller.gameTitle.text = self.popularGame[indexPath.row].name
                         controller.gameImage.image = self.popularGame[indexPath.row].image
+                        self.startOperations(game: self.popularGame[indexPath.row], indexPath: indexPath)
                     }
                 }
             }

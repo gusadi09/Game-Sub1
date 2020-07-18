@@ -9,12 +9,19 @@
 import Foundation
 import UIKit
 
-struct GameModel {
+class GameModel {
     let name: String
     let released: String
-    let bgImage: String
+    let bgImage: URL
     let rating: Double
     
     var image: UIImage?
     var state: DownloadState = .new
+    
+    init(name: String, released: String, bgImage: URL, rating:Double) {
+        self.name = name
+        self.released = released
+        self.bgImage = bgImage
+        self.rating = rating
+    }
 }
