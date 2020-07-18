@@ -229,6 +229,7 @@
                         <viewLayoutGuide key="safeArea" id="pHp-EH-DCa"/>
                     </view>
                     <connections>
+                        <outlet property="descLabel" destination="Drk-nq-Nag" id="3VZ-es-cIq"/>
                         <outlet property="gameImage" destination="vK5-rn-pTb" id="f8o-aC-M8B"/>
                         <outlet property="gameTitle" destination="udA-6Q-bnO" id="RCR-VP-Tkh"/>
                     </connections>
@@ -253,13 +254,13 @@
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Agus Adi Pranata" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EsZ-kA-jzz">
-                                <rect key="frame" x="113" y="214" width="188" height="29.5"/>
+                                <rect key="frame" x="125.5" y="214" width="163" height="29.5"/>
                                 <fontDescription key="fontDescription" name="Poppins-Bold" family="Poppins" pointSize="21"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Telkom University" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="73M-99-TME">
-                                <rect key="frame" x="146.5" y="263" width="121.5" height="20"/>
+                                <rect key="frame" x="152" y="263" width="110" height="20"/>
                                 <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="14"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>

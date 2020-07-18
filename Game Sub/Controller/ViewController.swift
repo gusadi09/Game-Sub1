@@ -14,6 +14,7 @@ enum DownloadState {
 
 class ImageDownloader: Operation {
     private let _game: GameModel
+    let manager = GameManager()
     
     init(game: GameModel) {
         _game = game
@@ -25,6 +26,7 @@ class ImageDownloader: Operation {
         }
         
         guard let imageData = try? Data(contentsOf: _game.bgImage) else { return }
+        guard let desc = try? String(contentsOf: URL(string: "\(manager.urlString)/\(_game.id)")!) else {return}
         
         if isCancelled {
             return
@@ -32,9 +34,11 @@ class ImageDownloader: Operation {
         
         if !imageData.isEmpty {
             _game.image = UIImage(data: imageData)
+            _game.desc = desc
             _game.state = .downloaded
         } else {
             _game.image = nil
+            _game.desc = ""
             _game.state = .failed
         }
     }
@@ -61,8 +65,6 @@ class ViewController: UIViewController {
     @IBOutlet weak var popularTable: UITableView!
     
     var timer = Timer()
-    
-    var image: [UIImage?] = []
     
     var gameManager = GameManager()
     
@@ -145,9 +147,7 @@ class ViewController: UIViewController {
                 let game = try! decoder.decode(GameData.self, from: data)
                 
                 game.results.forEach { (result) in
-                    
-                    
-                    let newData = GameModel(name: result.name, released: result.released, bgImage: URL(string: result.bgImage!)!, rating: result.rating)
+                    let newData = GameModel(id: result.id, name: result.name, released: result.released, bgImage: URL(string: result.bgImage!)!, rating: result.rating, desc: "")
                     
                     self.gameDat.append(newData)
                 }
@@ -175,7 +175,7 @@ class ViewController: UIViewController {
                 let game = try! decoder.decode(GameData.self, from: data)
                 
                 game.results.forEach { (result) in
-                    let newData = GameModel(name: result.name, released: result.released, bgImage: URL(string: result.bgImage!)!, rating: result.rating)
+                    let newData = GameModel(id: result.id, name: result.name, released: result.released, bgImage: URL(string: result.bgImage!)!, rating: result.rating, desc: "")
                     
                     self.popularGame.append(newData)
                 }
@@ -286,6 +286,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, UIScrollVi
                     DispatchQueue.main.async {
                         controller.gameTitle.text = self.gameDat[indexPath.row].name
                         controller.gameImage.image = self.gameDat[indexPath.row].image
+                        controller.descLabel.text = self.gameDat[indexPath.row].desc
                         self.startOperations(game: self.gameDat[indexPath.row], indexPath: indexPath)
                     }
                 }

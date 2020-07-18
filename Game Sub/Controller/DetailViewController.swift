@@ -12,6 +12,7 @@ class DetailViewController: UIViewController {
 
     @IBOutlet weak var gameTitle: UILabel!
     @IBOutlet weak var gameImage: UIImageView!
+    @IBOutlet weak var descLabel: UILabel!
     override func viewDidLoad() {
         super.viewDidLoad()
 

@@ -18,6 +18,7 @@ struct Results: Codable {
     let released: String
     let bgImage: String?
     let rating: Double
+    let ratingsCount: Int
     let genres: [Genres]
     
     enum CodingKeys: String, CodingKey {
@@ -26,6 +27,7 @@ struct Results: Codable {
         case released
         case bgImage = "background_image"
         case rating
+        case ratingsCount = "ratings_count"
         case genres
     }
 }

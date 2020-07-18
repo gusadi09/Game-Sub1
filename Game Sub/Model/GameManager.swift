@@ -9,6 +9,7 @@
 import Foundation
 
 struct GameManager {
+    let urlString = "https://api.rawg.io/api/games"
     let url = URL(string: "https://api.rawg.io/api/games")
     let popUrl = URL(string: "https://api.rawg.io/api/games?dates=2020-01-01,2020-12-31&ordering=-added")
 }
