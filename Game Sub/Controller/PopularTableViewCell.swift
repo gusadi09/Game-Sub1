@@ -18,6 +18,7 @@ class PopularTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        gameImage.layer.cornerRadius = 20
         cellView.layer.cornerRadius = 20
         cellView.layer.shadowColor = UIColor.black.cgColor
         cellView.layer.shadowOffset = CGSize(width: 0.0, height: 5.0)

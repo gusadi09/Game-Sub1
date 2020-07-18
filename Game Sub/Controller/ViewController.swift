@@ -24,6 +24,7 @@ class ViewController: UIViewController {
     var gameManager = GameManager()
     
     var gameDat: [GameModel] = []
+    var popularGame: [GameModel] = []
     
     
     override func viewDidLoad() {
@@ -31,7 +32,8 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view.
         UIBeautify()
         
-        loadData()
+        loadData(url: gameManager.url!)
+        loadDataPopular(url: gameManager.popUrl!)
         
         gameTable.delegate = self
         gameTable.dataSource = self
@@ -58,11 +60,10 @@ class ViewController: UIViewController {
         popularButton.layer.shadowOpacity = 0.5
         popularButton.layer.masksToBounds = false
     }
-    
-    @objc func loadData() {
-        let url = URL(string: "https://api.rawg.io/api/games")
-        
-        let request = URLRequest(url: url!)
+
+//MARK: -loadData
+    func loadData(url: URL) {
+        let request = URLRequest(url: url)
         
         let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
             guard let response = response as? HTTPURLResponse, let data = data else {return}
@@ -89,6 +90,35 @@ class ViewController: UIViewController {
         task.resume()
     }
     
+    func loadDataPopular(url: URL) {
+        let request = URLRequest(url: url)
+        
+        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+            guard let response = response as? HTTPURLResponse, let data = data else {return}
+            
+            if response.statusCode == 200 {
+                let decoder = JSONDecoder()
+                
+                let game = try! decoder.decode(GameData.self, from: data)
+                
+                game.results.forEach { (result) in
+                    let newData = GameModel(name: result.name, released: result.released, bgImage: result.bgImage!, rating: result.rating)
+                    
+                    self.popularGame.append(newData)
+                }
+                
+                DispatchQueue.main.async {
+                    self.popularTable.reloadData()
+                }
+            } else {
+                print("ERROR: \(data), HTTP Status: \(response.statusCode)")
+            }
+        }
+        
+        task.resume()
+    }
+    
+// MARK: -buttonFunctionality
     @IBAction func searchPressed(_ sender: UIButton) {
     }
     
@@ -121,7 +151,7 @@ class ViewController: UIViewController {
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if (tableView == popularTable) {
-            return 1
+            return popularGame.count
         }
         
         return gameDat.count
@@ -136,21 +166,63 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         if (tableView == popularTable) {
             let cell2 = popularTable.dequeueReusableCell(withIdentifier: "popCell", for: indexPath) as! PopularTableViewCell
             
+            if indexPath.row >= 0 && indexPath.count < popularGame.count {
+                print(popularGame[indexPath.row])
+                let data = try! Data(contentsOf: URL(string: popularGame[indexPath.row].bgImage)!)
+                do {
+                    cell2.gameImage.image = UIImage(data: data)
+                }
+                
+                cell2.gameTitle.text = popularGame[indexPath.row].name
+                cell2.gameRating.text = String(popularGame[indexPath.row].rating)
+            }
+            
             return cell2
         }
         
-        let data = try! Data(contentsOf: URL(string: gameDat[0].bgImage)!)
-        do {
-            cell.gameImage.image = UIImage(data: data)
-        } catch {
-            print("image not found")
+        if indexPath.row >= 0 && indexPath.count < gameDat.count {
+            print(gameDat[indexPath.row])
+            let data = try! Data(contentsOf: URL(string: gameDat[indexPath.row].bgImage)!)
+            do {
+                cell.gameImage.image = UIImage(data: data)
+            }
+            
+            cell.gameTitle.text = gameDat[indexPath.row].name
+            cell.gameRating.text = String(gameDat[indexPath.row].rating)
         }
-        
-        cell.gameTitle.text = gameDat[0].name
-        cell.gameRating.text = String(gameDat[0].rating)
     
         return cell
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        performSegue(withIdentifier: "goToDetail", sender: self)
+    }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "goToDetail" {
+            if gameTable.isHidden == false {
+                if let indexPath = self.gameTable.indexPathForSelectedRow {
+                    let controller = segue.destination as! DetailViewController
+                    DispatchQueue.main.async {
+                        controller.gameTitle.text = self.gameDat[indexPath.row].name
+                        let data = try! Data(contentsOf: URL(string: self.gameDat[indexPath.row].bgImage)!)
+                        do {
+                            controller.gameImage.image = UIImage(data: data)
+                        }
+                    }
+                }
+            } else {
+                if let indexPath = self.popularTable.indexPathForSelectedRow {
+                    let controller = segue.destination as! DetailViewController
+                    DispatchQueue.main.async {
+                        controller.gameTitle.text = self.popularGame[indexPath.row].name
+                        let data = try! Data(contentsOf: URL(string: self.popularGame[indexPath.row].bgImage)!)
+                        do {
+                            controller.gameImage.image = UIImage(data: data)
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

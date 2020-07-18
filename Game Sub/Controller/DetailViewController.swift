@@ -10,13 +10,18 @@ import UIKit
 
 class DetailViewController: UIViewController {
 
+    @IBOutlet weak var gameTitle: UILabel!
+    @IBOutlet weak var gameImage: UIImageView!
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
     }
     
-
+    @IBAction func backPressed(_ sender: UIButton) {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
     /*
     // MARK: - Navigation
 
