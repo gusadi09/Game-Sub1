@@ -14,7 +14,7 @@ enum DownloadState {
 
 class ImageDownloader: Operation {
     private let _game: GameModel
-    let manager = GameManager()
+    //let manager = GameManager()
     
     init(game: GameModel) {
         _game = game
@@ -26,7 +26,7 @@ class ImageDownloader: Operation {
         }
         
         guard let imageData = try? Data(contentsOf: _game.bgImage) else { return }
-        guard let desc = try? String(contentsOf: URL(string: "\(manager.urlString)/\(_game.id)")!) else {return}
+        //guard let desc = try? String(contentsOf: URL(string: "\(manager.urlString)/\(_game.id)")!) else {return}
         
         if isCancelled {
             return
@@ -34,11 +34,11 @@ class ImageDownloader: Operation {
         
         if !imageData.isEmpty {
             _game.image = UIImage(data: imageData)
-            _game.desc = desc
+            //_game.desc = desc
             _game.state = .downloaded
         } else {
             _game.image = nil
-            _game.desc = ""
+            //_game.desc = ""
             _game.state = .failed
         }
     }
@@ -115,6 +115,27 @@ class ViewController: UIViewController {
     
     fileprivate func startDownload(game: GameModel, indexPath: IndexPath) {
         guard _pendingOperations.downloadInProgress[indexPath] == nil else { return }
+        let manager = GameManager()
+        let url = URL(string: "\(manager.urlString)/\(game.id)")
+        
+        let request = URLRequest(url: url!)
+        
+        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+            guard let response = response as? HTTPURLResponse, let data = data else {return}
+            
+            if response.statusCode == 200 {
+                let decoder = JSONDecoder()
+                
+                let games = try! decoder.decode(OneGame.self, from: data)
+                
+                game.desc = games.desc
+                
+            } else {
+                print("ERROR: \(data), HTTP Status: \(response.statusCode)")
+            }
+        }
+        
+        task.resume()
         
         let downloader = ImageDownloader(game: game)
         downloader.completionBlock = {
@@ -286,7 +307,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, UIScrollVi
                     DispatchQueue.main.async {
                         controller.gameTitle.text = self.gameDat[indexPath.row].name
                         controller.gameImage.image = self.gameDat[indexPath.row].image
-                        controller.descLabel.text = self.gameDat[indexPath.row].desc
+                        controller.descTextView.text = self.gameDat[indexPath.row].desc
                         self.startOperations(game: self.gameDat[indexPath.row], indexPath: indexPath)
                     }
                 }
