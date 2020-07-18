@@ -7,10 +7,14 @@
 //
 
 import Foundation
+import UIKit
 
 struct GameModel {
     let name: String
     let released: String
     let bgImage: String
     let rating: Double
+    
+    var image: UIImage?
+    var state: DownloadState = .new
 }

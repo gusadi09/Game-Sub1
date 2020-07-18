@@ -26,9 +26,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="186" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="vg3-q8-CSJ">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="215" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="vg3-q8-CSJ">
                                 <rect key="frame" x="20" y="227" width="374" height="586"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                             </tableView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="215" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="UbL-dh-zOF">
@@ -152,11 +151,15 @@
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="N2G-gu-JRv" secondAttribute="trailing" constant="20" id="HZ6-mS-b1O"/>
                             <constraint firstItem="UbL-dh-zOF" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="IGH-NG-JH5"/>
                             <constraint firstItem="UbL-dh-zOF" firstAttribute="top" secondItem="E8Y-yF-lNs" secondAttribute="bottom" constant="15" id="IzW-uP-pHg"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="vg3-q8-CSJ" secondAttribute="trailing" constant="20" id="MCt-nA-niX"/>
+                            <constraint firstItem="vg3-q8-CSJ" firstAttribute="top" secondItem="E8Y-yF-lNs" secondAttribute="bottom" constant="15" id="OYz-g0-yhJ"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="F7G-6m-BPu" secondAttribute="trailing" constant="20" id="P8N-FF-c65"/>
                             <constraint firstItem="E8Y-yF-lNs" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" constant="-251" id="PyV-cz-cAm"/>
+                            <constraint firstItem="vg3-q8-CSJ" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="QlI-Hj-eug"/>
                             <constraint firstItem="E8Y-yF-lNs" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="cUK-ey-Hr9"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="UbL-dh-zOF" secondAttribute="trailing" constant="20" id="e9i-Qk-cPt"/>
                             <constraint firstItem="F7G-6m-BPu" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="pUI-rP-Dts"/>
+                            <constraint firstItem="vg3-q8-CSJ" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="qHO-ED-cyb"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="UbL-dh-zOF" secondAttribute="trailing" constant="20" id="tiE-9w-XqK"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>

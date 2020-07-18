@@ -8,6 +8,49 @@
 
 import UIKit
 
+enum DownloadState {
+    case new, downloaded, failed
+}
+
+class ImageDownloader: Operation {
+    private var _game: GameModel
+ 
+    init(game: GameModel) {
+        _game = game
+    }
+ 
+    override func main() {
+        if isCancelled {
+            return
+        }
+ 
+        guard let imageData = try? Data(contentsOf: URL(string: _game.bgImage)!) else { return }
+ 
+        if isCancelled {
+            return
+        }
+ 
+        if !imageData.isEmpty {
+            _game.image = UIImage(data: imageData)
+            _game.state = .downloaded
+        } else {
+            _game.image = nil
+            _game.state = .failed
+        }
+    }
+}
+
+class PendingOperations {
+    lazy var downloadInProgress: [IndexPath : Operation] = [:]
+ 
+    lazy var downloadQueue: OperationQueue = {
+        var queue = OperationQueue()
+        queue.name = "com.gusadi.imagedownload"
+        queue.maxConcurrentOperationCount = 2
+        return queue
+    }()
+}
+
 class ViewController: UIViewController {
 
     @IBOutlet weak var titleView: UILabel!
@@ -26,6 +69,7 @@ class ViewController: UIViewController {
     var gameDat: [GameModel] = []
     var popularGame: [GameModel] = []
     
+    private let _pendingOperations = PendingOperations()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,6 +104,29 @@ class ViewController: UIViewController {
         popularButton.layer.shadowOpacity = 0.5
         popularButton.layer.masksToBounds = false
     }
+    
+    fileprivate func startOperations(game: GameModel, indexPath: IndexPath) {
+        if game.state == .new {
+            startDownload(game: game, indexPath: indexPath)
+        }
+    }
+    
+    fileprivate func startDownload(game: GameModel, indexPath: IndexPath) {
+        guard _pendingOperations.downloadInProgress[indexPath] == nil else { return }
+        
+        let downloader = ImageDownloader(game: game)
+        downloader.completionBlock = {
+            if downloader.isCancelled { return }
+            
+            DispatchQueue.main.async {
+                self._pendingOperations.downloadInProgress.removeValue(forKey: indexPath)
+                print(indexPath)
+                self.gameTable.reloadRows(at: [indexPath], with: .automatic)
+                self.popularTable.reloadRows(at: [indexPath], with: .automatic)
+            }
+        }
+    }
+    
 
 //MARK: -loadData
     func loadData(url: URL) {
@@ -157,38 +224,45 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         return gameDat.count
     }
     
-    
-    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = gameTable.dequeueReusableCell(withIdentifier: "gamesCell", for: indexPath) as! GamesTableViewCell
         
+        
         if (tableView == popularTable) {
+            let popular = popularGame[indexPath.row]
             let cell2 = popularTable.dequeueReusableCell(withIdentifier: "popCell", for: indexPath) as! PopularTableViewCell
             
             if indexPath.row >= 0 && indexPath.count < popularGame.count {
-                print(popularGame[indexPath.row])
-                let data = try! Data(contentsOf: URL(string: popularGame[indexPath.row].bgImage)!)
-                do {
-                    cell2.gameImage.image = UIImage(data: data)
-                }
+                //print(popularGame[indexPath.row])
                 
-                cell2.gameTitle.text = popularGame[indexPath.row].name
-                cell2.gameRating.text = String(popularGame[indexPath.row].rating)
+                cell2.gameImage.image = popular.image
+                cell2.gameTitle.text = popular.name
+                cell2.gameRating.text = String(popular.rating)
+            }
+            
+            if popular.state == .new {
+                if !popularTable.isDragging && !popularTable.isDecelerating {
+                    startOperations(game: popular, indexPath: indexPath)
+                }
             }
             
             return cell2
         }
         
         if indexPath.row >= 0 && indexPath.count < gameDat.count {
-            print(gameDat[indexPath.row])
-            let data = try! Data(contentsOf: URL(string: gameDat[indexPath.row].bgImage)!)
-            do {
-                cell.gameImage.image = UIImage(data: data)
+            let game = gameDat[indexPath.row]
+            //print(gameDat[indexPath.row])
+            cell.gameImage.image = game.image
+            cell.gameTitle.text = game.name
+            cell.gameRating.text = String(game.rating)
+        }
+        
+        if gameDat[indexPath.row].state == .new {
+            if !gameTable.isDragging && !gameTable.isDecelerating {
+                //startOperations(game: gameDat[indexPath.row], indexPath: indexPath)
+                startDownload(game: gameDat[indexPath.row], indexPath: indexPath)
             }
-            
-            cell.gameTitle.text = gameDat[indexPath.row].name
-            cell.gameRating.text = String(gameDat[indexPath.row].rating)
         }
     
         return cell
@@ -205,10 +279,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
                     let controller = segue.destination as! DetailViewController
                     DispatchQueue.main.async {
                         controller.gameTitle.text = self.gameDat[indexPath.row].name
-                        let data = try! Data(contentsOf: URL(string: self.gameDat[indexPath.row].bgImage)!)
-                        do {
-                            controller.gameImage.image = UIImage(data: data)
-                        }
+                        controller.gameImage.image = self.gameDat[indexPath.row].image
                     }
                 }
             } else {
@@ -216,10 +287,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
                     let controller = segue.destination as! DetailViewController
                     DispatchQueue.main.async {
                         controller.gameTitle.text = self.popularGame[indexPath.row].name
-                        let data = try! Data(contentsOf: URL(string: self.popularGame[indexPath.row].bgImage)!)
-                        do {
-                            controller.gameImage.image = UIImage(data: data)
-                        }
+                        controller.gameImage.image = self.popularGame[indexPath.row].image
                     }
                 }
             }
