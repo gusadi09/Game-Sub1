@@ -14,22 +14,22 @@ enum DownloadState {
 
 class ImageDownloader: Operation {
     private let _game: GameModel
- 
+    
     init(game: GameModel) {
         _game = game
     }
- 
+    
     override func main() {
         if isCancelled {
             return
         }
- 
+        
         guard let imageData = try? Data(contentsOf: _game.bgImage) else { return }
- 
+        
         if isCancelled {
             return
         }
- 
+        
         if !imageData.isEmpty {
             _game.image = UIImage(data: imageData)
             _game.state = .downloaded
@@ -42,7 +42,7 @@ class ImageDownloader: Operation {
 
 class PendingOperations {
     lazy var downloadInProgress: [IndexPath : Operation] = [:]
- 
+    
     lazy var downloadQueue: OperationQueue = {
         var queue = OperationQueue()
         queue.name = "com.gusadi.imagedownload"
@@ -52,7 +52,7 @@ class PendingOperations {
 }
 
 class ViewController: UIViewController {
-
+    
     @IBOutlet weak var titleView: UILabel!
     @IBOutlet weak var searchTextField: UITextField!
     @IBOutlet weak var gamesButton: UIButton!
@@ -120,15 +120,19 @@ class ViewController: UIViewController {
             
             DispatchQueue.main.async {
                 self._pendingOperations.downloadInProgress.removeValue(forKey: indexPath)
-                print(indexPath)
                 self.gameTable.reloadRows(at: [indexPath], with: .automatic)
                 self.popularTable.reloadRows(at: [indexPath], with: .automatic)
+                
             }
         }
+        _pendingOperations.downloadInProgress[indexPath] = downloader
+        _pendingOperations.downloadQueue.addOperation(downloader)
     }
     
-
-//MARK: -loadData
+    fileprivate func toggleSuspendOperations(isSuspended: Bool) {
+        _pendingOperations.downloadQueue.isSuspended = isSuspended
+    }
+    //MARK: -loadData
     func loadData(url: URL) {
         let request = URLRequest(url: url)
         
@@ -141,6 +145,8 @@ class ViewController: UIViewController {
                 let game = try! decoder.decode(GameData.self, from: data)
                 
                 game.results.forEach { (result) in
+                    
+                    
                     let newData = GameModel(name: result.name, released: result.released, bgImage: URL(string: result.bgImage!)!, rating: result.rating)
                     
                     self.gameDat.append(newData)
@@ -185,7 +191,7 @@ class ViewController: UIViewController {
         task.resume()
     }
     
-// MARK: -buttonFunctionality
+    // MARK: -buttonFunctionality
     @IBAction func searchPressed(_ sender: UIButton) {
     }
     
@@ -215,7 +221,7 @@ class ViewController: UIViewController {
 }
 
 // MARK: -TableViewDelegate
-extension ViewController: UITableViewDelegate, UITableViewDataSource {
+extension ViewController: UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if (tableView == popularTable) {
             return popularGame.count
@@ -223,6 +229,15 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         
         return gameDat.count
     }
+    
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        toggleSuspendOperations(isSuspended: true)
+    }
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        toggleSuspendOperations(isSuspended: false)
+    }
+    
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
@@ -234,16 +249,11 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
             let cell2 = popularTable.dequeueReusableCell(withIdentifier: "popCell", for: indexPath) as! PopularTableViewCell
             
             if indexPath.row >= 0 && indexPath.count < popularGame.count {
-                print(popularGame[indexPath.row].image)
-                
                 cell2.gameImage.image = popular.image
                 cell2.gameTitle.text = popular.name
                 cell2.gameRating.text = String(popular.rating)
-            }
-            
-            if popular.state == .new {
-                if !popularTable.isDragging && !popularTable.isDecelerating {
-                    startOperations(game: popular, indexPath: indexPath)
+                if popular.state == .new {
+                        startOperations(game: popular, indexPath: indexPath)
                 }
             }
             
@@ -252,18 +262,15 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         
         if indexPath.row >= 0 && indexPath.count < gameDat.count {
             let game = gameDat[indexPath.row]
-            print(gameDat[indexPath.row].image)
             cell.gameImage.image = game.image
             cell.gameTitle.text = game.name
             cell.gameRating.text = String(game.rating)
-        }
-        
-        if gameDat[indexPath.row].state == .new {
-            if !gameTable.isDragging && !gameTable.isDecelerating {
-                startOperations(game: gameDat[indexPath.row], indexPath: indexPath)
+            
+            if gameDat[indexPath.row].state == .new {
+                    startOperations(game: gameDat[indexPath.row], indexPath: indexPath)
             }
+            
         }
-    
         return cell
     }
     
