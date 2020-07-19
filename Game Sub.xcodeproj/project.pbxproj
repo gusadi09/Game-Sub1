@@ -27,6 +27,7 @@
 		F1A4832F24C222CF0039EC5F /* GamesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A4832D24C222CF0039EC5F /* GamesTableViewCell.swift */; };
 		F1A4833024C222CF0039EC5F /* GamesTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F1A4832E24C222CF0039EC5F /* GamesTableViewCell.xib */; };
 		F1A4833224C35A4B0039EC5F /* OneGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A4833124C35A4B0039EC5F /* OneGame.swift */; };
+		F1A4833424C460830039EC5F /* UrlPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A4833324C460830039EC5F /* UrlPage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,6 +53,7 @@
 		F1A4832D24C222CF0039EC5F /* GamesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GamesTableViewCell.swift; sourceTree = "<group>"; };
 		F1A4832E24C222CF0039EC5F /* GamesTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GamesTableViewCell.xib; sourceTree = "<group>"; };
 		F1A4833124C35A4B0039EC5F /* OneGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneGame.swift; sourceTree = "<group>"; };
+		F1A4833324C460830039EC5F /* UrlPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UrlPage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -134,6 +136,7 @@
 				F1A4831424BF2F440039EC5F /* GameManager.swift */,
 				F1A4832B24C207060039EC5F /* GameModel.swift */,
 				F1A4833124C35A4B0039EC5F /* OneGame.swift */,
+				F1A4833324C460830039EC5F /* UrlPage.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -234,6 +237,7 @@
 				F1A4833224C35A4B0039EC5F /* OneGame.swift in Sources */,
 				F1A4832F24C222CF0039EC5F /* GamesTableViewCell.swift in Sources */,
 				F1A4832C24C207060039EC5F /* GameModel.swift in Sources */,
+				F1A4833424C460830039EC5F /* UrlPage.swift in Sources */,
 				F1A482FD24BEFD2F0039EC5F /* SceneDelegate.swift in Sources */,
 				F1A4831524BF2F440039EC5F /* GameManager.swift in Sources */,
 				F1A4832224C0B2220039EC5F /* DetailViewController.swift in Sources */,

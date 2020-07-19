@@ -9,6 +9,8 @@
 import Foundation
 
 struct GameData: Codable {
+    let next: String?
+    let previous: String?
     let results: [Results]
 }
 

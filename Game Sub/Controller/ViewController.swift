@@ -69,6 +69,8 @@ class ViewController: UIViewController {
     var filteredGame: [GameModel] = []
     
     var timer = Timer()
+    var limit = 0
+    var totalEntries = 419735
     
     var gameManager = GameManager()
     var isSearching = false
@@ -77,6 +79,8 @@ class ViewController: UIViewController {
     var filteredPopular: [GameModel] = []
     var gameDat: [GameModel] = []
     var popularGame: [GameModel] = []
+    var urlPage = ""
+    var loadingData = false
     
     private let _pendingOperations = PendingOperations()
     
@@ -87,6 +91,7 @@ class ViewController: UIViewController {
         
         loadData(url: gameManager.url!)
         loadDataPopular(url: gameManager.popUrl!)
+        
         
         gameTable.delegate = self
         gameTable.dataSource = self
@@ -179,6 +184,8 @@ class ViewController: UIViewController {
                 let decoder = JSONDecoder()
                 
                 let game = try! decoder.decode(GameData.self, from: data)
+                
+                self.urlPage = game.next!
                 
                 game.results.forEach { (result) in
                     let newData = GameModel(id: result.id, name: result.name, released: result.released, bgImage: URL(string: result.bgImage!)!, rating: result.rating, desc: "", genre: result.genres[0].name)
@@ -333,6 +340,16 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, UIScrollVi
             }
             
             return cell2
+        }
+        
+        let count = gameDat.count
+        if  count > 1{
+            let lastElement = count - 1
+            if !loadingData && indexPath.row == lastElement {
+                //call get api for next page
+                loadingData = true
+                loadData(url: URL(string: urlPage)!)
+            }
         }
         
         if indexPath.row >= 0 && indexPath.count < gameDat.count {
