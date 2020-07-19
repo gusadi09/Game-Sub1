@@ -14,7 +14,6 @@ enum DownloadState {
 
 class ImageDownloader: Operation {
     private let _game: GameModel
-    //let manager = GameManager()
     
     init(game: GameModel) {
         _game = game
@@ -26,7 +25,6 @@ class ImageDownloader: Operation {
         }
         
         guard let imageData = try? Data(contentsOf: _game.bgImage) else { return }
-        //guard let desc = try? String(contentsOf: URL(string: "\(manager.urlString)/\(_game.id)")!) else {return}
         
         if isCancelled {
             return
@@ -34,11 +32,9 @@ class ImageDownloader: Operation {
         
         if !imageData.isEmpty {
             _game.image = UIImage(data: imageData)
-            //_game.desc = desc
             _game.state = .downloaded
         } else {
             _game.image = nil
-            //_game.desc = ""
             _game.state = .failed
         }
     }
@@ -80,6 +76,7 @@ class ViewController: UIViewController {
     var gameDat: [GameModel] = []
     var popularGame: [GameModel] = []
     var urlPage = ""
+    var urlPagePop = ""
     var loadingData = false
     
     private let _pendingOperations = PendingOperations()
@@ -161,9 +158,13 @@ class ViewController: UIViewController {
             
             DispatchQueue.main.async {
                 self._pendingOperations.downloadInProgress.removeValue(forKey: indexPath)
-                self.gameTable.reloadRows(at: [indexPath], with: .automatic)
-                self.popularTable.reloadRows(at: [indexPath], with: .automatic)
+                if ((self.gameTable.cellForRow(at: indexPath)) != nil) {
+                    self.gameTable.reloadRows(at: [indexPath], with: .automatic)
+                }
                 
+                if ((self.popularTable.cellForRow(at: indexPath)) != nil) {
+                    self.popularTable.reloadRows(at: [indexPath], with: .automatic)
+                }
             }
         }
         _pendingOperations.downloadInProgress[indexPath] = downloader
@@ -214,6 +215,8 @@ class ViewController: UIViewController {
                 let decoder = JSONDecoder()
                 
                 let game = try! decoder.decode(GameData.self, from: data)
+                
+                self.urlPagePop = game.next!
                 
                 game.results.forEach { (result) in
                     let newData = GameModel(id: result.id, name: result.name, released: result.released, bgImage: URL(string: result.bgImage!)!, rating: result.rating, desc: "", genre: result.genres[0].name)
@@ -320,8 +323,16 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, UIScrollVi
         if (tableView == popularTable) {
             let popular = popularGame[indexPath.row]
             let cell2 = popularTable.dequeueReusableCell(withIdentifier: "popCell", for: indexPath) as! PopularTableViewCell
+            let pop = popularGame.count
             
             if indexPath.row >= 0 && indexPath.count < popularGame.count {
+                if  pop > 1{
+                    let lastElement = pop - 1
+                    if indexPath.row == lastElement {
+                        //call get api for next page
+                        loadDataPopular(url: URL(string: urlPagePop)!)
+                    }
+                }
                 if isSearchingPop {
                     cell2.gameImage.image = filteredPopular[indexPath.row].image
                     cell2.gameTitle.text = filteredPopular[indexPath.row].name
@@ -343,17 +354,16 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, UIScrollVi
         }
         
         let count = gameDat.count
-        if  count > 1{
-            let lastElement = count - 1
-            if !loadingData && indexPath.row == lastElement {
-                //call get api for next page
-                loadingData = true
-                loadData(url: URL(string: urlPage)!)
-            }
-        }
         
         if indexPath.row >= 0 && indexPath.count < gameDat.count {
             let game = gameDat[indexPath.row]
+            if  count > 1{
+                let lastElement = count - 1
+                if indexPath.row == lastElement {
+                    //call get api for next page
+                    loadData(url: URL(string: urlPage)!)
+                }
+            }
             if isSearching {
                 cell.gameImage.image = filteredGame[indexPath.row].image
                 cell.gameTitle.text = filteredGame[indexPath.row].name
