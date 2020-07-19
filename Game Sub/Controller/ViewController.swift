@@ -55,19 +55,26 @@ class PendingOperations {
     }()
 }
 
+//MARK: - ViewController
 class ViewController: UIViewController {
     
     @IBOutlet weak var titleView: UILabel!
-    @IBOutlet weak var searchTextField: UITextField!
     @IBOutlet weak var gamesButton: UIButton!
     @IBOutlet weak var popularButton: UIButton!
     @IBOutlet weak var gameTable: UITableView!
     @IBOutlet weak var popularTable: UITableView!
+    @IBOutlet weak var gameSearchBar: UISearchBar!
+    @IBOutlet weak var popSearchBar: UISearchBar!
+    
+    var filteredGame: [GameModel] = []
     
     var timer = Timer()
     
     var gameManager = GameManager()
-    
+    var isSearching = false
+    var isSearchingPop = false
+
+    var filteredPopular: [GameModel] = []
     var gameDat: [GameModel] = []
     var popularGame: [GameModel] = []
     
@@ -90,6 +97,11 @@ class ViewController: UIViewController {
         popularTable.register(UINib(nibName: "PopularTableViewCell", bundle: nil), forCellReuseIdentifier: "popCell")
         
         gameTable.register(UINib(nibName: "GamesTableViewCell", bundle: nil), forCellReuseIdentifier: "gamesCell")
+        
+        gameSearchBar.delegate = self
+        popSearchBar.delegate = self
+        
+        self.hideKeyboardWhenTappedAround()
     }
     
     func UIBeautify() {
@@ -107,6 +119,7 @@ class ViewController: UIViewController {
         popularButton.layer.masksToBounds = false
     }
     
+//MARK: - Download Image
     fileprivate func startOperations(game: GameModel, indexPath: IndexPath) {
         if game.state == .new {
             startDownload(game: game, indexPath: indexPath)
@@ -155,7 +168,7 @@ class ViewController: UIViewController {
     fileprivate func toggleSuspendOperations(isSuspended: Bool) {
         _pendingOperations.downloadQueue.isSuspended = isSuspended
     }
-    //MARK: -loadData
+//MARK: -loadData
     func loadData(url: URL) {
         let request = URLRequest(url: url)
         
@@ -168,7 +181,7 @@ class ViewController: UIViewController {
                 let game = try! decoder.decode(GameData.self, from: data)
                 
                 game.results.forEach { (result) in
-                    let newData = GameModel(id: result.id, name: result.name, released: result.released, bgImage: URL(string: result.bgImage!)!, rating: result.rating, desc: "")
+                    let newData = GameModel(id: result.id, name: result.name, released: result.released, bgImage: URL(string: result.bgImage!)!, rating: result.rating, desc: "", genre: result.genres[0].name)
                     
                     self.gameDat.append(newData)
                 }
@@ -196,7 +209,7 @@ class ViewController: UIViewController {
                 let game = try! decoder.decode(GameData.self, from: data)
                 
                 game.results.forEach { (result) in
-                    let newData = GameModel(id: result.id, name: result.name, released: result.released, bgImage: URL(string: result.bgImage!)!, rating: result.rating, desc: "")
+                    let newData = GameModel(id: result.id, name: result.name, released: result.released, bgImage: URL(string: result.bgImage!)!, rating: result.rating, desc: "", genre: result.genres[0].name)
                     
                     self.popularGame.append(newData)
                 }
@@ -212,10 +225,7 @@ class ViewController: UIViewController {
         task.resume()
     }
     
-    // MARK: -buttonFunctionality
-    @IBAction func searchPressed(_ sender: UIButton) {
-    }
-    
+// MARK: -buttonFunctionality
     @IBAction func tabPressed(_ sender: UIButton) {
         if (sender == popularButton) {
             popularButton.backgroundColor = .black
@@ -224,6 +234,8 @@ class ViewController: UIViewController {
             gameTable.isHidden = true
             popularTable.isHidden = false
             titleView.text = "Popular"
+            popSearchBar.isHidden = false
+            gameSearchBar.isHidden = true
             
             gamesButton.backgroundColor = .white
             gamesButton.isSelected = false
@@ -234,6 +246,8 @@ class ViewController: UIViewController {
             popularTable.isHidden = true
             gameTable.isHidden = false
             titleView.text = "Games"
+            popSearchBar.isHidden = true
+            gameSearchBar.isHidden = false
             
             popularButton.backgroundColor = .white
             popularButton.isSelected = false
@@ -241,14 +255,45 @@ class ViewController: UIViewController {
     }
 }
 
+//MARK: - UITextFieldDelegate
+extension ViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchBar == gameSearchBar {
+            filteredGame = gameDat.filter({$0.name.prefix(searchText.count) == searchText})
+            isSearching = true
+            gameTable.reloadData()
+        } else {
+            filteredPopular = popularGame.filter({$0.name.prefix(searchText.count) == searchText})
+            isSearchingPop = true
+            popularTable.reloadData()
+        }
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        if searchBar == gameSearchBar {
+            gameSearchBar.endEditing(true)
+        } else {
+            popSearchBar.endEditing(true)
+        }
+    }
+}
 // MARK: -TableViewDelegate
 extension ViewController: UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if (tableView == popularTable) {
-            return popularGame.count
+            if isSearchingPop {
+                return filteredPopular.count
+            } else {
+                return popularGame.count
+            }
         }
         
-        return gameDat.count
+        if isSearching {
+            return filteredGame.count
+        } else {
+            return gameDat.count
+        }
+        
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
@@ -270,11 +315,20 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, UIScrollVi
             let cell2 = popularTable.dequeueReusableCell(withIdentifier: "popCell", for: indexPath) as! PopularTableViewCell
             
             if indexPath.row >= 0 && indexPath.count < popularGame.count {
-                cell2.gameImage.image = popular.image
-                cell2.gameTitle.text = popular.name
-                cell2.gameRating.text = String(popular.rating)
-                if popular.state == .new {
-                        startOperations(game: popular, indexPath: indexPath)
+                if isSearchingPop {
+                    cell2.gameImage.image = filteredPopular[indexPath.row].image
+                    cell2.gameTitle.text = filteredPopular[indexPath.row].name
+                    cell2.gameRating.text = String(filteredPopular[indexPath.row].rating)
+                    if filteredPopular[indexPath.row].state == .new {
+                            startOperations(game: filteredPopular[indexPath.row], indexPath: indexPath)
+                    }
+                } else {
+                    cell2.gameImage.image = popular.image
+                    cell2.gameTitle.text = popular.name
+                    cell2.gameRating.text = String(popular.rating)
+                    if popular.state == .new {
+                            startOperations(game: popular, indexPath: indexPath)
+                    }
                 }
             }
             
@@ -283,12 +337,22 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, UIScrollVi
         
         if indexPath.row >= 0 && indexPath.count < gameDat.count {
             let game = gameDat[indexPath.row]
-            cell.gameImage.image = game.image
-            cell.gameTitle.text = game.name
-            cell.gameRating.text = String(game.rating)
-            
-            if gameDat[indexPath.row].state == .new {
-                    startOperations(game: gameDat[indexPath.row], indexPath: indexPath)
+            if isSearching {
+                cell.gameImage.image = filteredGame[indexPath.row].image
+                cell.gameTitle.text = filteredGame[indexPath.row].name
+                cell.gameRating.text = String(filteredGame[indexPath.row].rating)
+                
+                if filteredGame[indexPath.row].state == .new {
+                        startOperations(game: filteredGame[indexPath.row], indexPath: indexPath)
+                }
+            } else {
+                cell.gameImage.image = game.image
+                cell.gameTitle.text = game.name
+                cell.gameRating.text = String(game.rating)
+                
+                if gameDat[indexPath.row].state == .new {
+                        startOperations(game: gameDat[indexPath.row], indexPath: indexPath)
+                }
             }
             
         }
@@ -304,23 +368,68 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, UIScrollVi
             if gameTable.isHidden == false {
                 if let indexPath = self.gameTable.indexPathForSelectedRow {
                     let controller = segue.destination as! DetailViewController
-                    DispatchQueue.main.async {
-                        controller.gameTitle.text = self.gameDat[indexPath.row].name
-                        controller.gameImage.image = self.gameDat[indexPath.row].image
-                        controller.descTextView.text = self.gameDat[indexPath.row].desc
-                        self.startOperations(game: self.gameDat[indexPath.row], indexPath: indexPath)
+                    if isSearching {
+                        DispatchQueue.main.async {
+                            controller.gameTitle.text = self.filteredGame[indexPath.row].name
+                            controller.gameImage.image = self.filteredGame[indexPath.row].image
+                            controller.descTextView.text = self.filteredGame[indexPath.row].desc
+                            controller.ratingGame.text = String(format: "%.2f", self.filteredGame[indexPath.row].rating)
+                            controller.releaseGame.text = self.filteredGame[indexPath.row].released
+                            controller.genreGame.text = self.filteredGame[indexPath.row].genre
+                            self.startOperations(game: self.filteredGame[indexPath.row], indexPath: indexPath)
+                        }
+                    } else {
+                        DispatchQueue.main.async {
+                            controller.gameTitle.text = self.gameDat[indexPath.row].name
+                            controller.gameImage.image = self.gameDat[indexPath.row].image
+                            controller.descTextView.text = self.gameDat[indexPath.row].desc
+                            controller.ratingGame.text = String(format: "%.2f", self.gameDat[indexPath.row].rating)
+                            controller.releaseGame.text = self.gameDat[indexPath.row].released
+                            controller.genreGame.text = self.gameDat[indexPath.row].genre
+                            self.startOperations(game: self.gameDat[indexPath.row], indexPath: indexPath)
+                        }
                     }
+                    
                 }
             } else {
                 if let indexPath = self.popularTable.indexPathForSelectedRow {
                     let controller = segue.destination as! DetailViewController
-                    DispatchQueue.main.async {
-                        controller.gameTitle.text = self.popularGame[indexPath.row].name
-                        controller.gameImage.image = self.popularGame[indexPath.row].image
-                        self.startOperations(game: self.popularGame[indexPath.row], indexPath: indexPath)
+                    if isSearching {
+                        DispatchQueue.main.async {
+                            controller.gameTitle.text = self.filteredPopular[indexPath.row].name
+                            controller.gameImage.image = self.filteredPopular[indexPath.row].image
+                            controller.descTextView.text = self.filteredPopular[indexPath.row].desc
+                            controller.ratingGame.text = String(format: "%.2f", self.filteredPopular[indexPath.row].rating)
+                            controller.releaseGame.text = self.filteredPopular[indexPath.row].released
+                            controller.genreGame.text = self.filteredPopular[indexPath.row].genre
+                            self.startOperations(game: self.filteredPopular[indexPath.row], indexPath: indexPath)
+                        }
+                    } else {
+                        DispatchQueue.main.async {
+                            controller.gameTitle.text = self.popularGame[indexPath.row].name
+                            controller.gameImage.image = self.popularGame[indexPath.row].image
+                            controller.descTextView.text = self.popularGame[indexPath.row].desc
+                            controller.ratingGame.text = String(format: "%.2f", self.popularGame[indexPath.row].rating)
+                            controller.releaseGame.text = self.popularGame[indexPath.row].released
+                            controller.genreGame.text = self.popularGame[indexPath.row].genre
+                            self.startOperations(game: self.popularGame[indexPath.row], indexPath: indexPath)
+                        }
                     }
                 }
             }
         }
+    }
+}
+
+//MARK: -HideKeyboardTapOutside
+extension UIViewController {
+    func hideKeyboardWhenTappedAround() {
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
+
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
     }
 }

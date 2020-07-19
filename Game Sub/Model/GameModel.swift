@@ -15,17 +15,19 @@ class GameModel {
     let released: String
     let bgImage: URL
     let rating: Double
+    let genre: String
     
     var desc: String
     var image: UIImage?
     var state: DownloadState = .new
     
-    init(id: Int64, name: String, released: String, bgImage: URL, rating:Double, desc: String) {
+    init(id: Int64, name: String, released: String, bgImage: URL, rating:Double, desc: String, genre: String) {
         self.id = id
         self.name = name
         self.released = released
         self.bgImage = bgImage
         self.rating = rating
         self.desc = desc
+        self.genre = genre
     }
 }

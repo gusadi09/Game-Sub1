@@ -12,12 +12,25 @@ class DetailViewController: UIViewController {
 
     @IBOutlet weak var gameTitle: UILabel!
     @IBOutlet weak var gameImage: UIImageView!
-    
     @IBOutlet weak var descTextView: UITextView!
+    @IBOutlet weak var ratingGame: UILabel!
+    @IBOutlet weak var releaseGame: UILabel!
+    @IBOutlet weak var genreGame: UILabel!
+    
+    @IBOutlet weak var descWrapView: UIView!
+    @IBOutlet weak var releaseView: UIView!
+    @IBOutlet weak var genreView: UIView!
+    @IBOutlet weak var ratingView: UIView!
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        descWrapView.layer.cornerRadius = 15
+        releaseView.layer.cornerRadius = 5
+        genreView.layer.cornerRadius = 10
+        ratingView.layer.cornerRadius = 10
+        
+        gameImage.layer.cornerRadius = 20
     }
     
     @IBAction func backPressed(_ sender: UIButton) {
