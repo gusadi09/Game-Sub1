@@ -387,19 +387,19 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, UIScrollVi
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier: "goToDetail", sender: self)
+        performSegue(withIdentifier: "goToDetailScroll", sender: self)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "goToDetail" {
+        if segue.identifier == "goToDetailScroll" {
             if gameTable.isHidden == false {
                 if let indexPath = self.gameTable.indexPathForSelectedRow {
-                    let controller = segue.destination as! DetailViewController
+                    let controller = segue.destination as! DetailScrollViewController
                     if isSearching {
                         DispatchQueue.main.async {
                             controller.gameTitle.text = self.filteredGame[indexPath.row].name
                             controller.gameImage.image = self.filteredGame[indexPath.row].image
-                            controller.descTextView.text = self.filteredGame[indexPath.row].desc
+                            controller.descText.text = self.filteredGame[indexPath.row].desc
                             controller.ratingGame.text = String(format: "%.2f", self.filteredGame[indexPath.row].rating)
                             controller.releaseGame.text = self.filteredGame[indexPath.row].released
                             controller.genreGame.text = self.filteredGame[indexPath.row].genre
@@ -409,7 +409,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, UIScrollVi
                         DispatchQueue.main.async {
                             controller.gameTitle.text = self.gameDat[indexPath.row].name
                             controller.gameImage.image = self.gameDat[indexPath.row].image
-                            controller.descTextView.text = self.gameDat[indexPath.row].desc
+                            controller.descText.text = self.gameDat[indexPath.row].desc
                             controller.ratingGame.text = String(format: "%.2f", self.gameDat[indexPath.row].rating)
                             controller.releaseGame.text = self.gameDat[indexPath.row].released
                             controller.genreGame.text = self.gameDat[indexPath.row].genre
@@ -420,12 +420,12 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, UIScrollVi
                 }
             } else {
                 if let indexPath = self.popularTable.indexPathForSelectedRow {
-                    let controller = segue.destination as! DetailViewController
+                    let controller = segue.destination as! DetailScrollViewController
                     if isSearching {
                         DispatchQueue.main.async {
                             controller.gameTitle.text = self.filteredPopular[indexPath.row].name
                             controller.gameImage.image = self.filteredPopular[indexPath.row].image
-                            controller.descTextView.text = self.filteredPopular[indexPath.row].desc
+                            controller.descText.text = self.filteredPopular[indexPath.row].desc
                             controller.ratingGame.text = String(format: "%.2f", self.filteredPopular[indexPath.row].rating)
                             controller.releaseGame.text = self.filteredPopular[indexPath.row].released
                             controller.genreGame.text = self.filteredPopular[indexPath.row].genre
@@ -435,7 +435,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, UIScrollVi
                         DispatchQueue.main.async {
                             controller.gameTitle.text = self.popularGame[indexPath.row].name
                             controller.gameImage.image = self.popularGame[indexPath.row].image
-                            controller.descTextView.text = self.popularGame[indexPath.row].desc
+                            controller.descText.text = self.popularGame[indexPath.row].desc
                             controller.ratingGame.text = String(format: "%.2f", self.popularGame[indexPath.row].rating)
                             controller.releaseGame.text = self.popularGame[indexPath.row].released
                             controller.genreGame.text = self.popularGame[indexPath.row].genre

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		ECEFC0EB24D7D99900FAB45E /* DetailScrollViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECEFC0EA24D7D99900FAB45E /* DetailScrollViewController.swift */; };
 		F1A482FB24BEFD2F0039EC5F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A482FA24BEFD2F0039EC5F /* AppDelegate.swift */; };
 		F1A482FD24BEFD2F0039EC5F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A482FC24BEFD2F0039EC5F /* SceneDelegate.swift */; };
 		F1A482FF24BEFD2F0039EC5F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A482FE24BEFD2F0039EC5F /* ViewController.swift */; };
@@ -20,7 +21,6 @@
 		F1A4831D24BF304A0039EC5F /* Poppins-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F1A4831924BF304A0039EC5F /* Poppins-Regular.ttf */; };
 		F1A4831E24BF304A0039EC5F /* Poppins-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F1A4831A24BF304A0039EC5F /* Poppins-ExtraBold.ttf */; };
 		F1A4832024C0B20F0039EC5F /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A4831F24C0B20F0039EC5F /* AboutViewController.swift */; };
-		F1A4832224C0B2220039EC5F /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A4832124C0B2220039EC5F /* DetailViewController.swift */; };
 		F1A4832924C1E7D70039EC5F /* PopularTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A4832724C1E7D70039EC5F /* PopularTableViewCell.swift */; };
 		F1A4832A24C1E7D70039EC5F /* PopularTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F1A4832824C1E7D70039EC5F /* PopularTableViewCell.xib */; };
 		F1A4832C24C207060039EC5F /* GameModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A4832B24C207060039EC5F /* GameModel.swift */; };
@@ -31,6 +31,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		ECEFC0EA24D7D99900FAB45E /* DetailScrollViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailScrollViewController.swift; sourceTree = "<group>"; };
 		F1A482F724BEFD2F0039EC5F /* Game Sub.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Game Sub.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1A482FA24BEFD2F0039EC5F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F1A482FC24BEFD2F0039EC5F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -46,7 +47,6 @@
 		F1A4831924BF304A0039EC5F /* Poppins-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Regular.ttf"; sourceTree = "<group>"; };
 		F1A4831A24BF304A0039EC5F /* Poppins-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-ExtraBold.ttf"; sourceTree = "<group>"; };
 		F1A4831F24C0B20F0039EC5F /* AboutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
-		F1A4832124C0B2220039EC5F /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		F1A4832724C1E7D70039EC5F /* PopularTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularTableViewCell.swift; sourceTree = "<group>"; };
 		F1A4832824C1E7D70039EC5F /* PopularTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PopularTableViewCell.xib; sourceTree = "<group>"; };
 		F1A4832B24C207060039EC5F /* GameModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameModel.swift; sourceTree = "<group>"; };
@@ -103,9 +103,9 @@
 			children = (
 				F1A482FE24BEFD2F0039EC5F /* ViewController.swift */,
 				F1A4831F24C0B20F0039EC5F /* AboutViewController.swift */,
-				F1A4832124C0B2220039EC5F /* DetailViewController.swift */,
 				F1A4832724C1E7D70039EC5F /* PopularTableViewCell.swift */,
 				F1A4832D24C222CF0039EC5F /* GamesTableViewCell.swift */,
+				ECEFC0EA24D7D99900FAB45E /* DetailScrollViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -240,7 +240,7 @@
 				F1A4833424C460830039EC5F /* UrlPage.swift in Sources */,
 				F1A482FD24BEFD2F0039EC5F /* SceneDelegate.swift in Sources */,
 				F1A4831524BF2F440039EC5F /* GameManager.swift in Sources */,
-				F1A4832224C0B2220039EC5F /* DetailViewController.swift in Sources */,
+				ECEFC0EB24D7D99900FAB45E /* DetailScrollViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
